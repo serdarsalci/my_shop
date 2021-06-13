@@ -35,11 +35,20 @@ final List<Product> loadedProducts = [
   ),
 ];
 
+var _showFavoitesOnly = false;
+
 class Products with ChangeNotifier {
   List<Product> _items = loadedProducts;
 
   List<Product> get items {
+    // if (_showFavoitesOnly) {
+    //   return _items.where((prodItem) => prodItem.isFavorite).toList();
+    // }
     return [..._items];
+  }
+
+  List<Product> get favoriteItems {
+    return _items.where((prod) => prod.isFavorite).toList();
   }
 
   void addProduct() {
@@ -50,4 +59,14 @@ class Products with ChangeNotifier {
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
+
+  // void showFavorites() {
+  //   _showFavoitesOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavoitesOnly = false;
+  //   notifyListeners();
+  // }
 }

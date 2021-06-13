@@ -32,6 +32,7 @@ class ProductItem extends StatelessWidget {
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
+          // use Consumer if only part of the widget tree needs to change like here only favorite icon needs to change
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
               icon: Icon(product.isFavorite
