@@ -16,14 +16,21 @@ class CartItem {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items;
+  Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
     return {..._items};
   }
 
-  void addItem(String productId, String price, String title) {
-    if (_items.containsKey(productId)) {
+  int get itemCount {
+    // if (_items == null) {
+    //   return 0;
+    // }
+    return _items.length;
+  }
+
+  void addItem(String productId, double price, String title) {
+    if (_items != null && _items.containsKey(productId)) {
       // change quantity
       _items.update(
           productId,
@@ -39,8 +46,9 @@ class Cart with ChangeNotifier {
           () => CartItem(
               id: DateTime.now().toString(),
               title: title,
-              price: double.tryParse(price),
+              price: price,
               quantity: 1));
     }
+    notifyListeners();
   }
 }
