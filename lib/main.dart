@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 import './screens/product_overview_screen.dart';
@@ -26,13 +27,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
-        ),
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(primary: Colors.purple),
+            )),
         home: ProductOverviewScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+          CartScreen.routeName: (ctx) => CartScreen()
         },
       ),
     );
