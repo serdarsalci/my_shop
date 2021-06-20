@@ -7,6 +7,7 @@ import '../widgets/badge.dart';
 import '../screens/cart_screen.dart';
 import '../providers/cart.dart';
 import '../screens/orders_screen.dart';
+import '../providers/products_pro.dart';
 
 enum FilterOptions { Favorites, All }
 
@@ -20,6 +21,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final productsData = Provider.of<Products>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('MyShop'),
@@ -28,9 +30,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             onSelected: (FilterOptions selectedValue) {
               setState(() {
                 if (selectedValue == FilterOptions.Favorites) {
-                  _showOnlyFavorites = true;
+                  // _showOnlyFavorites = true;
+                  productsData.showFavorites();
                 } else {
-                  _showOnlyFavorites = false;
+                  // _showOnlyFavorites = false;
+                  productsData.showAll();
                 }
               });
             },
@@ -65,7 +69,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       ),
       drawer: AppDrawer(),
       // gridview.builder only renders items on the screen.. for long gridviews it is ideal
-      body: ProductsGrid(_showOnlyFavorites),
+      body: ProductsGrid(),
     );
   }
 }

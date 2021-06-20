@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import './products_pro.dart' as pro;
 
 class Product with ChangeNotifier {
   final String id;
@@ -20,6 +21,7 @@ class Product with ChangeNotifier {
   void toggleFavoriteStatus() {
     isFavorite = !isFavorite;
     notifyListeners();
+
     // print('Fav button clicked');
   }
 }

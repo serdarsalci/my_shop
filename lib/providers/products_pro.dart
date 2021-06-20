@@ -35,16 +35,19 @@ final List<Product> loadedProducts = [
   ),
 ];
 
-var _showFavoitesOnly = false;
-
 class Products with ChangeNotifier {
   List<Product> _items = loadedProducts;
+  var _showFavoitesOnly = false;
 
   List<Product> get items {
     // if (_showFavoitesOnly) {
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
     // }
     return [..._items];
+  }
+
+  bool get favoritesOnly {
+    return _showFavoitesOnly;
   }
 
   List<Product> get favoriteItems {
@@ -60,13 +63,17 @@ class Products with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  // void showFavorites() {
-  //   _showFavoitesOnly = true;
-  //   notifyListeners();
-  // }
+  void showFavorites() {
+    _showFavoitesOnly = true;
+    notifyListeners();
+  }
 
-  // void showAll() {
-  //   _showFavoitesOnly = false;
-  //   notifyListeners();
-  // }
+  void showAll() {
+    _showFavoitesOnly = false;
+    notifyListeners();
+  }
+
+  void favUpdated() {
+    notifyListeners();
+  }
 }

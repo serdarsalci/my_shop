@@ -3,18 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
+import '../providers/products_pro.dart';
 import '../providers/cart.dart';
 
 class ProductItem extends StatelessWidget {
-  // final String id;
-  // final String title;
-  // final String imageUrl;
-
-  // ProductItem(this.id, this.title, this.imageUrl);
-
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context, listen: false);
+    final product = Provider.of<Product>(context, listen: true);
     final cart = Provider.of<Cart>(context, listen: false);
 
     return ClipRRect(
@@ -34,6 +29,7 @@ class ProductItem extends StatelessWidget {
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
+
           // use Consumer if only part of the widget tree needs to change like here only favorite icon needs to change
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
@@ -42,6 +38,7 @@ class ProductItem extends StatelessWidget {
                   : Icons.favorite_border_outlined),
               onPressed: () {
                 product.toggleFavoriteStatus();
+                Provider.of<Products>(context, listen: false).favUpdated();
               },
               color: Theme.of(context).accentColor,
             ),
