@@ -1,10 +1,12 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/app_drawer.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import '../screens/cart_screen.dart';
 import '../providers/cart.dart';
+import '../screens/orders_screen.dart';
 
 enum FilterOptions { Favorites, All }
 
@@ -61,6 +63,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           )
         ],
       ),
+      drawer: AppDrawer(),
       // gridview.builder only renders items on the screen.. for long gridviews it is ideal
       body: ProductsGrid(_showOnlyFavorites),
     );
