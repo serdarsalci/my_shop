@@ -32,7 +32,8 @@ class Cart with ChangeNotifier {
   double get totalAmount {
     var total = 0.0;
     _items.forEach((key, cartItem) {
-      total += cartItem.quantity * cartItem.price;
+      total +=
+          num.parse((cartItem.quantity * cartItem.price).toStringAsFixed(2));
     });
     return total;
   }
