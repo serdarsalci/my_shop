@@ -11,14 +11,7 @@ import '../providers/products_pro.dart';
 
 enum FilterOptions { Favorites, All }
 
-class ProductOverviewScreen extends StatefulWidget {
-  @override
-  _ProductOverviewScreenState createState() => _ProductOverviewScreenState();
-}
-
-class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
-  var _showOnlyFavorites = false;
-
+class ProductOverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
@@ -28,15 +21,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
-              setState(() {
-                if (selectedValue == FilterOptions.Favorites) {
-                  // _showOnlyFavorites = true;
-                  productsData.showFavorites();
-                } else {
-                  // _showOnlyFavorites = false;
-                  productsData.showAll();
-                }
-              });
+              if (selectedValue == FilterOptions.Favorites) {
+                // _showOnlyFavorites = true;
+                productsData.showFavorites();
+              } else {
+                // _showOnlyFavorites = false;
+                productsData.showAll();
+              }
             },
             icon: Icon(Icons.more_vert),
             tooltip: 'tooltip',

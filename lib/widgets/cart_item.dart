@@ -8,6 +8,7 @@ class CartItem extends StatelessWidget {
   final double price;
   final int quantity;
   final String title;
+  final double itemTotal;
 
   CartItem(
     this.id,
@@ -15,6 +16,7 @@ class CartItem extends StatelessWidget {
     this.price,
     this.quantity,
     this.title,
+    this.itemTotal,
   );
 
   @override
@@ -52,7 +54,7 @@ class CartItem extends StatelessWidget {
                 ),
               ),
               title: Text(title),
-              subtitle: Text('Total: \$${price * quantity}'),
+              subtitle: Text('Total: \$$itemTotal'),
               trailing: Text('$quantity x'),
             ),
           )),

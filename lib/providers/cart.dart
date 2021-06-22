@@ -6,13 +6,21 @@ class CartItem {
   final String title;
   final int quantity;
   final double price;
+  double _itemTotal;
 
   CartItem({
     @required this.id,
     @required this.title,
     @required this.quantity,
     @required this.price,
-  });
+  }) {
+    this._itemTotal =
+        num.parse((this.quantity * this.price).toStringAsFixed(2));
+  }
+
+  double get getItemTotal {
+    return _itemTotal;
+  }
 }
 
 class Cart with ChangeNotifier {
@@ -32,8 +40,9 @@ class Cart with ChangeNotifier {
   double get totalAmount {
     var total = 0.0;
     _items.forEach((key, cartItem) {
-      total +=
-          num.parse((cartItem.quantity * cartItem.price).toStringAsFixed(2));
+      total += cartItem.getItemTotal;
+      total = num.parse(total.toStringAsFixed(2));
+      // num.parse((cartItem.quantity * cartItem.price).toStringAsFixed(2));
     });
     return total;
   }
@@ -63,6 +72,25 @@ class Cart with ChangeNotifier {
 
   void removeItem(String productId) {
     _items.remove(productId);
+    notifyListeners();
+  }
+
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId].quantity > 1) {
+      _items.update(
+          productId,
+          (existingCartItem) => CartItem(
+                id: existingCartItem.id,
+                title: existingCartItem.title,
+                quantity: existingCartItem.quantity - 1,
+                price: existingCartItem.price,
+              ));
+    } else {
+      _items.remove(productId);
+    }
     notifyListeners();
   }
 
