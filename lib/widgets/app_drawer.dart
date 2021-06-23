@@ -3,6 +3,7 @@ import '../screens/cart_screen.dart';
 import '../screens/orders_screen.dart';
 import '../providers/products_pro.dart';
 import 'package:provider/provider.dart';
+import '../screens/user_product_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -40,6 +41,16 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               productsData.showFavorites();
               Navigator.of(context).pushReplacementNamed('/');
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Manage Products'),
+            onTap: () {
+              productsData.showFavorites();
+              Navigator.of(context)
+                  .pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
         ],
