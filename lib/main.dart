@@ -9,7 +9,7 @@ import './screens/user_product_screen.dart';
 import './screens/edit_product_screen.dart';
 
 import './providers/products_pro.dart';
-import './providers/product.dart' as prod;
+// import './providers/product.dart' as prod;
 import './providers/cart.dart';
 import './providers/orders.dart';
 
