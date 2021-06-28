@@ -47,6 +47,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    final _isValid = _form.currentState.validate();
+    if (!_isValid) {
+      return;
+    }
     _form.currentState.save();
     print(_edittedProduct.title);
     print(_edittedProduct.description);
@@ -76,6 +80,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   // onFieldSubmitted fired, value entered is given but not not needed here
                   onFieldSubmitted: (_value) {
                     FocusScope.of(context).requestFocus(_priceFocusNode);
+                  },
+                  validator: (value) {
+                    // return null means no validation errror
+                    // if you return a string it is considered error message
+                    if (value.isEmpty) {
+                      print('Empty title');
+                      return "Please provide a value";
+                    }
+                    return null;
                   },
                   onSaved: (value) {
                     _edittedProduct = Product(
