@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../providers/product.dart';
+import '../providers/products_pro.dart';
 // import '../providers/products_pro.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -57,6 +59,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     print(_edittedProduct.price);
     print(_edittedProduct.id);
     print(_edittedProduct.imageUrl);
+    Provider.of<Products>(context, listen: false).addProduct(_edittedProduct);
+    Navigator.of(context).pop();
   }
 
   @override
