@@ -13,34 +13,43 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _showMyDialog() async {
+    Future<void> _showMyDialog(title) async {
       return showDialog<void>(
         context: context,
-        barrierDismissible: true, // user must tap button!
+        barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Are you sure you want to delete this product?'),
+            title: Text('Are you sure you want to delete $title ?'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: const <Widget>[
-                  Text('This action can not be undone.'),
+                  const Text('This action can not be undone.'),
                 ],
               ),
             ),
             actions: <Widget>[
-              TextButton(
+              ElevatedButton(
                 child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                style: ButtonStyle(backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                  return Theme.of(context).focusColor;
+                })),
               ),
-              TextButton(
+              ElevatedButton(
                 child: const Text('Delete'),
                 onPressed: () {
                   Provider.of<Products>(context, listen: false)
                       .deleteProduct(id);
                   Navigator.of(context).pop();
                 },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => Theme.of(context).errorColor),
+                ),
               ),
             ],
           );
@@ -68,7 +77,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () async {
-                _showMyDialog();
+                _showMyDialog(title);
 
                 // Provider.of<Products>(context, listen: false).deleteProduct(id);
               },

@@ -73,20 +73,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
     _form.currentState.save();
     if (_edittedProduct.id != null) {
-      // print('edittedProduct id is not null');
-      // print(_edittedProduct.id);
       Provider.of<Products>(context, listen: false)
           .updateProduct(_edittedProduct.id, _edittedProduct);
     } else {
-      // print('$_edittedProduct.[id] is showin null');
-      // print('edittedProduct id is NULL');
       Provider.of<Products>(context, listen: false).addProduct(_edittedProduct);
     }
-    // print(_edittedProduct.title);
-    // print(_edittedProduct.description);
-    // print(_edittedProduct.price);
-    // print(_edittedProduct.id);
-    // print(_edittedProduct.imageUrl);
+
     Navigator.of(context).pop();
   }
 

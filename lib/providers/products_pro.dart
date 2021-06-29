@@ -1,4 +1,6 @@
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'product.dart';
 
 final List<Product> loadedProducts = [
@@ -54,7 +56,19 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  void addProduct(Product product) {
+  void addProduct(Product product) async {
+    final url = Uri.parse(
+        'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json');
+
+    http.post(url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }));
+
     final newProduct = Product(
       title: product.title,
       description: product.description,
