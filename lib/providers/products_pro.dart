@@ -56,28 +56,32 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  void addProduct(Product product) async {
+  void addProduct(Product product) {
     final url = Uri.parse(
         'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json');
 
-    http.post(url,
-        body: json.encode({
-          'title': product.title,
-          'description': product.description,
-          'imageUrl': product.imageUrl,
-          'price': product.price,
-          'isFavorite': product.isFavorite,
-        }));
+    http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'description': product.description,
+              'imageUrl': product.imageUrl,
+              'price': product.price,
+              'isFavorite': product.isFavorite,
+            }))
+        .then((response) {
+      print(json.decode(response.body));
+      final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        id: json.decode(response.body)['name'],
+        imageUrl: product.imageUrl,
+        price: product.price,
+      );
 
-    final newProduct = Product(
-      title: product.title,
-      description: product.description,
-      id: DateTime.now().toString(),
-      imageUrl: product.imageUrl,
-      price: product.price,
-    );
-    _items.add(newProduct);
-    notifyListeners();
+      _items.add(newProduct);
+      notifyListeners();
+    });
   }
 
   Product findById(String id) {
