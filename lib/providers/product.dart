@@ -18,9 +18,10 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  void toggleFavoriteStatus() {
+  bool toggleFavoriteStatus() {
     isFavorite = !isFavorite;
     notifyListeners();
+    return isFavorite;
 
     // print('Fav button clicked');
   }

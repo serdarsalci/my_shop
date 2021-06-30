@@ -56,11 +56,11 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     final url = Uri.parse(
         'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json');
 
-    http
+    return http
         .post(url,
             body: json.encode({
               'title': product.title,
@@ -85,7 +85,10 @@ class Products with ChangeNotifier {
   }
 
   Product findById(String id) {
-    return _items.firstWhere((prod) => prod.id == id);
+    return _items.firstWhere((prod) => prod.id == id, orElse: () {
+      return null;
+      // throw ErrorDescription('No prod with this id found');
+    });
   }
 
   void showFavorites() {

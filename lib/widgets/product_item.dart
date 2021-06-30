@@ -37,8 +37,15 @@ class ProductItem extends StatelessWidget {
                   ? Icons.favorite
                   : Icons.favorite_border_outlined),
               onPressed: () {
-                product.toggleFavoriteStatus();
+                bool isFavorite = product.toggleFavoriteStatus();
                 Provider.of<Products>(context, listen: false).favUpdated();
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(isFavorite
+                      ? '${product.title} added to favorites'
+                      : '${product.title} removed from favorites'),
+                  duration: Duration(seconds: 2),
+                ));
               },
               color: Theme.of(context).accentColor,
             ),

@@ -14,8 +14,19 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context).settings.arguments as String;
     // by setting the listen to false, we are not listening thus rebuilding this widget when products state change. it makes sense because this is one product detail screen.
+
     final loadedProduct =
         Provider.of<Products>(context, listen: false).findById(productId);
+
+    if (loadedProduct == null) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('This product does not exist'),
+        duration: Duration(seconds: 3),
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedProduct.title),
