@@ -56,21 +56,32 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  Future<void> addProduct(Product product) {
+  Future<void> fetcAndSetProducts() async {
     final url = Uri.parse(
         'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json');
 
-    return http
-        .post(url,
-            body: json.encode({
-              'title': product.title,
-              'description': product.description,
-              'imageUrl': product.imageUrl,
-              'price': product.price,
-              'isFavorite': product.isFavorite,
-            }))
-        .then((response) {
+    try {
+      final response = await http.get(url);
       print(json.decode(response.body));
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<void> addProduct(Product product) async {
+    final url = Uri.parse(
+        'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json');
+
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'title': product.title,
+            'description': product.description,
+            'imageUrl': product.imageUrl,
+            'price': product.price,
+            'isFavorite': product.isFavorite,
+          }));
+
       final newProduct = Product(
         title: product.title,
         description: product.description,
@@ -78,13 +89,12 @@ class Products with ChangeNotifier {
         imageUrl: product.imageUrl,
         price: product.price,
       );
-
       _items.add(newProduct);
       notifyListeners();
-    }).catchError((error) {
-      print('error caught  at products_pro $error ');
+    } catch (error) {
+      // print('error caught  at products_pro $error ');
       throw error;
-    });
+    }
   }
 
   Product findById(String id) {
