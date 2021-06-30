@@ -81,6 +81,9 @@ class Products with ChangeNotifier {
 
       _items.add(newProduct);
       notifyListeners();
+    }).catchError((error) {
+      print('error caught  at products_pro $error ');
+      throw error;
     });
   }
 
