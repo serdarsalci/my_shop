@@ -19,6 +19,7 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _isInit = true;
+  var _isLoading = false;
 
   // @override
   // void initState() {
@@ -31,7 +32,14 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<Products>(context).fetcAndSetProducts();
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Products>(context).fetcAndSetProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -85,7 +93,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       ),
       drawer: AppDrawer(),
       // gridview.builder only renders items on the screen.. for long gridviews it is ideal
-      body: ProductsGrid(),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ProductsGrid(),
     );
   }
 }
