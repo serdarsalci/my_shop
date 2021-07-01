@@ -36,16 +36,30 @@ class ProductItem extends StatelessWidget {
               icon: Icon(product.isFavorite
                   ? Icons.favorite
                   : Icons.favorite_border_outlined),
-              onPressed: () {
-                bool isFavorite = product.toggleFavoriteStatus();
-                Provider.of<Products>(context, listen: false).favUpdated();
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(isFavorite
-                      ? '${product.title} added to favorites'
-                      : '${product.title} removed from favorites'),
-                  duration: Duration(seconds: 2),
-                ));
+              onPressed: () async {
+                try {
+                  final favChanged = await product.toggleFavoriteStatus();
+                  Provider.of<Products>(context, listen: false).favUpdated();
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: favChanged
+                        ? Text(product.isFavorite
+                            ? '${product.title} added to favorites'
+                            : '${product.title} removed from favorites')
+                        : Text(
+                            'Failed to change favorite status',
+                            textAlign: TextAlign.center,
+                          ),
+                    duration: Duration(seconds: 2),
+                  ));
+                } catch (error) {
+                  print(error.toString());
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Status failed'),
+                    duration: Duration(seconds: 2),
+                  ));
+                }
               },
               color: Theme.of(context).accentColor,
             ),

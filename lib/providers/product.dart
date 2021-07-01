@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 // import './products_pro.dart' as pro;
 
 class Product with ChangeNotifier {
@@ -18,10 +20,33 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  bool toggleFavoriteStatus() {
+  void _saveFavValue(favStatus) {
+    isFavorite = favStatus;
+    notifyListeners();
+  }
+
+  Future<bool> toggleFavoriteStatus() async {
+    final oldStatus = isFavorite;
+
     isFavorite = !isFavorite;
     notifyListeners();
-    return isFavorite;
+    final url = Uri.parse(
+        'https://proshop-2e18c-default-rtdb.firebaseio.com/products/$id.json');
+
+    try {
+      final response =
+          await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
+
+      print(response.statusCode);
+      if (response.statusCode >= 400) {
+        _saveFavValue(oldStatus);
+        return false;
+      }
+    } catch (error) {
+      _saveFavValue(oldStatus);
+      return false;
+    }
+    return true;
 
     // print('Fav button clicked');
   }
