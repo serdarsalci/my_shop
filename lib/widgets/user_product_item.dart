@@ -13,6 +13,8 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     Future<void> _showMyDialog(title) async {
       return showDialog<void>(
         context: context,
@@ -41,9 +43,22 @@ class UserProductItem extends StatelessWidget {
               ),
               ElevatedButton(
                 child: const Text('Delete'),
-                onPressed: () {
-                  Provider.of<Products>(context, listen: false)
-                      .deleteProduct(id);
+                onPressed: () async {
+                  try {
+                    await Provider.of<Products>(context, listen: false)
+                        .deleteProduct(id);
+                    scaffoldMessenger.showSnackBar(SnackBar(
+                        content: Text(
+                      'Product Deleted.',
+                      textAlign: TextAlign.center,
+                    )));
+                  } catch (error) {
+                    scaffoldMessenger.showSnackBar(SnackBar(
+                        content: Text(
+                      'Deleting failed',
+                      textAlign: TextAlign.center,
+                    )));
+                  }
                   Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
