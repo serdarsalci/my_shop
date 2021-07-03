@@ -7,7 +7,9 @@ import 'package:intl/intl.dart';
 class OrderItem extends StatefulWidget {
   final ord.OrderItem order;
 
-  OrderItem(this.order);
+  OrderItem(this.order) {
+    print(order.amount);
+  }
 
   @override
   _OrderItemState createState() => _OrderItemState();
