@@ -32,7 +32,7 @@ class ProductItem extends StatelessWidget {
 
           // use Consumer if only part of the widget tree needs to change like here only favorite icon needs to change
           leading: Consumer<Product>(
-            builder: (ctx, product, _) => IconButton(
+            builder: (ctx, product, child) => IconButton(
               icon: Icon(product.isFavorite
                   ? Icons.favorite
                   : Icons.favorite_border_outlined),
