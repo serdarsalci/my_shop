@@ -1,7 +1,9 @@
-import 'dart:ffi';
+import 'package:provider/provider.dart';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import '../providers/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -102,7 +104,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -115,6 +117,8 @@ class _AuthCardState extends State<AuthCard> {
       // Log user in
     } else {
       // Sign user up
+      await Provider.of<Auth>(context, listen: false)
+          .signUp(_authData['email'], _authData['password']);
     }
     setState(() {
       _isLoading = false;
@@ -203,21 +207,14 @@ class _AuthCardState extends State<AuthCard> {
                       Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                   onPressed: _submit,
                   style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 8.0)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                      ),
-                      backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).primaryColor),
-                      foregroundColor: MaterialStateProperty.all(
-                          Theme.of(context).accentColor)),
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                  ),
                 ),
-
-              // color: Theme.of(context).primaryColor,
-              // textColor: Theme.of(context).primaryTextTheme.button.color,
-
               TextButton(
                 child: Text(
                     '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),

@@ -13,6 +13,7 @@ import './providers/products_pro.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
 import './screens/auth_screen.dart';
+import './providers/auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,16 +33,22 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => Orders(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
         )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
             primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrange,
+            accentColor: Colors.deepOrange[50],
             fontFamily: 'Lato',
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(primary: Colors.purple),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                // backgroundColor: Colors.amber,
+              ),
             )),
         home: AuthScreen(),
         routes: {
