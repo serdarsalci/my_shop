@@ -12,6 +12,7 @@ import './providers/products_pro.dart';
 // import './providers/product.dart' as prod;
 import './providers/cart.dart';
 import './providers/orders.dart';
+import './screens/auth_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(primary: Colors.purple),
             )),
-        home: ProductOverviewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
