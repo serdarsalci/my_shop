@@ -115,6 +115,11 @@ class _AuthCardState extends State<AuthCard> {
     });
     if (_authMode == AuthMode.Login) {
       // Log user in
+      await Provider.of<Auth>(context, listen: false).login(
+        _authData['email'],
+        _authData['password'],
+      );
+      print('LogedIn successfuly');
     } else {
       // Sign user up
       await Provider.of<Auth>(context, listen: false)
@@ -163,7 +168,6 @@ class _AuthCardState extends State<AuthCard> {
                     return 'Invalid email!';
                   }
                   return null;
-                  return null;
                 },
                 onSaved: (value) {
                   _authData['email'] = value;
@@ -177,7 +181,7 @@ class _AuthCardState extends State<AuthCard> {
                   if (value.isEmpty || value.length < 5) {
                     return 'Password is too short!';
                   }
-                  // return 'pass';
+                 // return 'pass';
                 },
                 onSaved: (value) {
                   _authData['password'] = value;
