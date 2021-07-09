@@ -42,6 +42,9 @@ class Products with ChangeNotifier {
   List<Product> _items = [];
   var _showFavoitesOnly = false;
 
+  String authToken;
+  Products(this.authToken, this._items);
+
   List<Product> get items {
     // if (_showFavoitesOnly) {
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
@@ -59,7 +62,7 @@ class Products with ChangeNotifier {
 
   Future<void> fetcAndSetProducts() async {
     final url = Uri.parse(
-        'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json');
+        'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json?auth=$authToken');
 
     try {
       final response = await http.get(url);
