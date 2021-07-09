@@ -13,7 +13,18 @@ class Auth with ChangeNotifier {
 
   String _apiKey = dotenv.env['API_KEY'];
 
-  // final _apiKey = 'AIzaSyAldAv5wWKSvR3772cVdQNOdW2NlxjRNk8';
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
@@ -34,6 +45,13 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now().add(
+        Duration(seconds: int.tryParse(responseData['expiresIn'])),
+      );
+      print(_expiryDate.toString());
+      notifyListeners();
     } catch (error) {
       throw error;
     }

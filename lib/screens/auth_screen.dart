@@ -145,8 +145,10 @@ class _AuthCardState extends State<AuthCard> {
         print('LogedIn successfuly');
       } else {
         // Sign user up
-        await Provider.of<Auth>(context, listen: false)
-            .signUp(_authData['email'], _authData['password']);
+        await Provider.of<Auth>(context, listen: false).signUp(
+          _authData['email'],
+          _authData['password'],
+        );
       }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
