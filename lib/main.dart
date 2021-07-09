@@ -53,10 +53,7 @@ class MyApp extends StatelessWidget {
             accentColor: Colors.deepOrange[50],
             fontFamily: 'Lato',
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                // backgroundColor: Colors.amber,
-              ),
+              style: TextButton.styleFrom(),
             )),
         home: AuthScreen(),
         routes: {

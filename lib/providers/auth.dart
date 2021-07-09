@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../models/http_exception.dart';
 
 import 'package:flutter/widgets.dart';
 
@@ -21,14 +22,22 @@ class Auth with ChangeNotifier {
 
     final url = Uri.parse(endPoint);
 
-    final response = await http.post(url,
-        body: json.encode({
-          'email': email,
-          "password": password,
-          'returnSecureToken': true,
-        }));
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'email': email,
+            "password": password,
+            'returnSecureToken': true,
+          }));
+      final responseData = json.decode(response.body);
+      print(responseData);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+    } catch (error) {
+      throw error;
+    }
 
-    print(json.decode(response.body));
     // print(response.body.toString());
   }
 
