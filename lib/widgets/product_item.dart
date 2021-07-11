@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,8 @@ class ProductItem extends StatelessWidget {
     final product = Provider.of<Product>(context, listen: true);
     final cart = Provider.of<Cart>(context, listen: false);
     final authData = Provider.of<Auth>(context, listen: false);
+
+    // print(json.decode(product.toString()));
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -43,8 +47,8 @@ class ProductItem extends StatelessWidget {
               ),
               onPressed: () async {
                 try {
-                  final favChanged =
-                      await product.toggleFavoriteStatus(authData.token);
+                  final favChanged = await product.toggleFavoriteStatus(
+                      authData.token, authData.userId);
                   Provider.of<Products>(context, listen: false).favUpdated();
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

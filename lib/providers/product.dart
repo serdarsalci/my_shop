@@ -25,17 +25,15 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> toggleFavoriteStatus(String authToken) async {
+  Future<bool> toggleFavoriteStatus(String authToken, String userId) async {
     final oldStatus = isFavorite;
-
     isFavorite = !isFavorite;
     notifyListeners();
     final url = Uri.parse(
-        'https://proshop-2e18c-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
+        'https://proshop-2e18c-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json?auth=$authToken');
 
     try {
-      final response =
-          await http.patch(url, body: json.encode({'isFavorite': isFavorite}));
+      final response = await http.put(url, body: json.encode(isFavorite));
 
       print(response.statusCode);
       if (response.statusCode >= 400) {
@@ -45,6 +43,8 @@ class Product with ChangeNotifier {
     } catch (error) {
       _saveFavValue(oldStatus);
       return false;
+    } finally {
+      notifyListeners();
     }
     return true;
 

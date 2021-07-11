@@ -40,10 +40,12 @@ import 'product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [];
+  List<Product> _favoriteProducts = [];
   var _showFavoitesOnly = false;
 
   String authToken;
-  Products(this.authToken, this._items);
+  String userId;
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
     // if (_showFavoitesOnly) {
@@ -57,19 +59,27 @@ class Products with ChangeNotifier {
   }
 
   List<Product> get favoriteItems {
-    return _items.where((prod) => prod.isFavorite).toList();
+    return _favoriteProducts;
   }
 
   Future<void> fetcAndSetProducts() async {
-    final url = Uri.parse(
-        'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json?auth=$authToken');
-
+    print(userId);
     try {
+      var url = Uri.parse(
+          'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
       }
+      url = Uri.parse(
+          'https://proshop-2e18c-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken');
+
+      final favoritesResponse = await http.get(url);
+      final favoritesData = json.decode(favoritesResponse.body);
+      print(favoritesData.toString());
+
       final List<Product> loadedProducts = [];
 
       extractedData.forEach((prodId, prodData) {
@@ -79,11 +89,15 @@ class Products with ChangeNotifier {
               title: prodData['title'],
               description: prodData['description'],
               imageUrl: prodData['imageUrl'],
-              isFavorite: prodData['isFavorite'],
+              isFavorite: favoritesData == null
+                  ? false
+                  : favoritesData[prodId] ?? false,
               price: prodData['price']),
         );
       });
       _items = loadedProducts;
+      _favoriteProducts =
+          loadedProducts.where((prod) => prod.isFavorite == true).toList();
       notifyListeners();
     } catch (error) {
       throw (error);
@@ -101,7 +115,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite,
+            // 'isFavorite': product.isFavorite,
           }));
 
       final newProduct = Product(

@@ -14,6 +14,8 @@ class ProductsGrid extends StatelessWidget {
     final productsData = Provider.of<Products>(context);
     var msg;
 
+    productsData.fetcAndSetProducts();
+
     final products = productsData.favoritesOnly
         ? productsData.favoriteItems
         : productsData.items;

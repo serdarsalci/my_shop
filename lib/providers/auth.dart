@@ -17,6 +17,14 @@ class Auth with ChangeNotifier {
     return token != null;
   }
 
+  String get userId {
+    if (_userId != null) {
+      // print('userId is $userId');
+      return _userId;
+    }
+    return null;
+  }
+
   String get token {
     if (_expiryDate != null &&
         _expiryDate.isAfter(DateTime.now()) &&
