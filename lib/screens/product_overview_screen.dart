@@ -79,10 +79,12 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             builder: (ctx, cart, ch) => Badge(
               child: ch,
               value: cart.itemCount.toString(),
+              color: Colors.orange[400],
             ),
             child: IconButton(
               icon: Icon(
                 Icons.shopping_cart,
+                color: Colors.white,
               ),
               onPressed: () {
                 Navigator.of(context).pushNamed(CartScreen.routeName);

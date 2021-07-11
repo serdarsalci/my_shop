@@ -15,8 +15,9 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   Future _ordersFuture;
-  Future _obtainOrdersFuture() {
-    return Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+  Future _obtainOrdersFuture() async {
+    return await Provider.of<Orders>(context, listen: false)
+        .fetchAndSetOrders();
   }
 
   @override
@@ -38,6 +39,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             if (dataSnapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (dataSnapshot.hasError) {
+              print(dataSnapshot.error.toString());
               return Center(
                 child: Text('Something went wrong'),
               );

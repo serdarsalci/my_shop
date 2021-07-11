@@ -44,20 +44,23 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (ctx) => Cart(),
           ),
-          ChangeNotifierProvider(
-            create: (ctx) => Orders(),
+          ChangeNotifierProxyProvider<Auth, Orders>(
+            create: (ctx) => Orders('', []),
+            update: (ctx, auth, prevOrders) =>
+                Orders(auth.token, prevOrders == null ? [] : prevOrders.orders),
           ),
         ],
         child: Consumer<Auth>(
           builder: (ctx, auth, child) => MaterialApp(
             title: 'Flutter Demo',
             theme: ThemeData(
-                primarySwatch: Colors.purple,
-                accentColor: Colors.deepOrange[50],
-                fontFamily: 'Lato',
-                textButtonTheme: TextButtonThemeData(
-                  style: TextButton.styleFrom(),
-                )),
+              primarySwatch: Colors.purple,
+              accentColor: Colors.deepOrange[50],
+              fontFamily: 'Lato',
+              // textButtonTheme: TextButtonThemeData(
+              //   style: TextButton.styleFrom(),
+              // ),
+            ),
             // home: ProductOverviewScreen(),
             home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
             routes: {

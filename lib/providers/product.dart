@@ -25,13 +25,13 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> toggleFavoriteStatus() async {
+  Future<bool> toggleFavoriteStatus(String authToken) async {
     final oldStatus = isFavorite;
 
     isFavorite = !isFavorite;
     notifyListeners();
     final url = Uri.parse(
-        'https://proshop-2e18c-default-rtdb.firebaseio.com/products/$id.json');
+        'https://proshop-2e18c-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
 
     try {
       final response =

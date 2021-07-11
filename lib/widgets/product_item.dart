@@ -5,12 +5,14 @@ import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/products_pro.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: true);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -33,12 +35,16 @@ class ProductItem extends StatelessWidget {
           // use Consumer if only part of the widget tree needs to change like here only favorite icon needs to change
           leading: Consumer<Product>(
             builder: (ctx, product, child) => IconButton(
-              icon: Icon(product.isFavorite
-                  ? Icons.favorite
-                  : Icons.favorite_border_outlined),
+              icon: Icon(
+                product.isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border_outlined,
+                color: Colors.red,
+              ),
               onPressed: () async {
                 try {
-                  final favChanged = await product.toggleFavoriteStatus();
+                  final favChanged =
+                      await product.toggleFavoriteStatus(authData.token);
                   Provider.of<Products>(context, listen: false).favUpdated();
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
