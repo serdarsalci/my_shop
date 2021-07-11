@@ -4,44 +4,10 @@ import '../models/http_exception.dart';
 import 'dart:convert';
 import 'product.dart';
 
-// final List<Product> loadedProducts = [
-//   Product(
-//     id: 'p1',
-//     title: 'Red Shirt',
-//     description: 'A red shirt - it is pretty red!',
-//     price: 29.99,
-//     imageUrl:
-//         'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-//   ),
-//   Product(
-//     id: 'p2',
-//     title: 'Trousers',
-//     description: 'A nice pair of trousers.',
-//     price: 59.99,
-//     imageUrl:
-//         'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-//   ),
-//   Product(
-//     id: 'p3',
-//     title: 'Yellow Scarf',
-//     description: 'Warm and cozy - exactly what you need for the winter.',
-//     price: 19.99,
-//     imageUrl: 'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-//   ),
-//   Product(
-//     id: 'p4',
-//     title: 'A Pan',
-//     description: 'Prepare any meal you want.',
-//     price: 49.99,
-//     imageUrl:
-//         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-//   ),
-// ];
-
 class Products with ChangeNotifier {
   List<Product> _items = [];
   List<Product> _favoriteProducts = [];
-  var _showFavoitesOnly = false;
+  var _showFavoritesOnly = false;
 
   String authToken;
   String userId;
@@ -55,21 +21,28 @@ class Products with ChangeNotifier {
   }
 
   bool get favoritesOnly {
-    return _showFavoitesOnly;
+    return _showFavoritesOnly;
   }
 
   List<Product> get favoriteItems {
     return _favoriteProducts;
   }
 
-  Future<void> fetcAndSetProducts() async {
-    print(userId);
+  // void notifyProductsListeners() {
+  //   notifyListeners();
+  // }
+
+  Future<void> fetcAndSetProducts([bool filterByUser = false]) async {
+    print('User Id from Products.fetchAndSetProducts');
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     try {
       var url = Uri.parse(
-          'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+          'https://proshop-2e18c-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString');
 
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(extractedData.toString());
       if (extractedData == null) {
         return;
       }
@@ -78,11 +51,13 @@ class Products with ChangeNotifier {
 
       final favoritesResponse = await http.get(url);
       final favoritesData = json.decode(favoritesResponse.body);
+      print('this is favorites Data from products provider');
       print(favoritesData.toString());
 
       final List<Product> loadedProducts = [];
 
       extractedData.forEach((prodId, prodData) {
+        print('prod found');
         loadedProducts.add(
           Product(
               id: prodId,
@@ -95,9 +70,17 @@ class Products with ChangeNotifier {
               price: prodData['price']),
         );
       });
+      print('showFavorites only is $_showFavoritesOnly');
+
+      _favoriteProducts = loadedProducts
+          .where((element) => element.isFavorite == true)
+          .toList();
+
       _items = loadedProducts;
-      _favoriteProducts =
-          loadedProducts.where((prod) => prod.isFavorite == true).toList();
+      // _items = _showFavoritesOnly
+      //     ? loadedProducts.where((prod) => prod.isFavorite == true).toList()
+      //     : loadedProducts;
+
       notifyListeners();
     } catch (error) {
       throw (error);
@@ -115,7 +98,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            // 'isFavorite': product.isFavorite,
+            'creatorId': userId,
           }));
 
       final newProduct = Product(
@@ -141,16 +124,22 @@ class Products with ChangeNotifier {
   }
 
   void showFavorites() {
-    _showFavoitesOnly = true;
+    _showFavoritesOnly = true;
+    print('showFavorites Called');
     notifyListeners();
+    // fetcAndSetProducts();
   }
 
   void showAll() {
-    _showFavoitesOnly = false;
+    print('showAll Called');
+    _showFavoritesOnly = false;
     notifyListeners();
+    // fetcAndSetProducts();
   }
 
   void favUpdated() {
+    // fetcAndSetProducts();
+    print('favUpdated Called');
     notifyListeners();
   }
 

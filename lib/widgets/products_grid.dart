@@ -5,16 +5,10 @@ import '../providers/products_pro.dart';
 // import '../providers/product.dart';
 
 class ProductsGrid extends StatelessWidget {
-  // final bool showFavs;
-
-  // ProductsGrid();
-
-  @override
   Widget build(BuildContext context) {
+    // Provider.of<Products>(context, listen: false).fetcAndSetProducts();
     final productsData = Provider.of<Products>(context);
     var msg;
-
-    productsData.fetcAndSetProducts();
 
     final products = productsData.favoritesOnly
         ? productsData.favoriteItems
