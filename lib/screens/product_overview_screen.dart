@@ -95,7 +95,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       drawer: AppDrawer(),
       // gridview.builder only renders items on the screen.. for long gridviews it is ideal
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: Text('ProductOverviewScreen loading'))
           : ProductsGrid(),
     );
   }
