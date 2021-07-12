@@ -33,7 +33,7 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetcAndSetProducts([bool filterByUser = false]) async {
-    print('User Id from Products.fetchAndSetProducts');
+    // print('User Id from Products.fetchAndSetProducts');
     final filterString =
         filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     try {
@@ -42,7 +42,7 @@ class Products with ChangeNotifier {
 
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      print(extractedData.toString());
+      // print(extractedData.toString());
       if (extractedData == null) {
         return;
       }
@@ -51,13 +51,12 @@ class Products with ChangeNotifier {
 
       final favoritesResponse = await http.get(url);
       final favoritesData = json.decode(favoritesResponse.body);
-      print('this is favorites Data from products provider');
-      print(favoritesData.toString());
+      // print('this is favorites Data from products provider');
+      // print(favoritesData.toString());
 
       final List<Product> loadedProducts = [];
 
       extractedData.forEach((prodId, prodData) {
-        print('prod found');
         loadedProducts.add(
           Product(
               id: prodId,
@@ -70,7 +69,7 @@ class Products with ChangeNotifier {
               price: prodData['price']),
         );
       });
-      print('showFavorites only is $_showFavoritesOnly');
+      // print('showFavorites only is $_showFavoritesOnly');
 
       _favoriteProducts = loadedProducts
           .where((element) => element.isFavorite == true)
@@ -125,13 +124,13 @@ class Products with ChangeNotifier {
 
   void showFavorites() {
     _showFavoritesOnly = true;
-    print('showFavorites Called');
+    // print('showFavorites Called');
     notifyListeners();
     // fetcAndSetProducts();
   }
 
   void showAll() {
-    print('showAll Called');
+    // print('showAll Called');
     _showFavoritesOnly = false;
     notifyListeners();
     // fetcAndSetProducts();
@@ -139,7 +138,7 @@ class Products with ChangeNotifier {
 
   void favUpdated() {
     // fetcAndSetProducts();
-    print('favUpdated Called');
+    // print('favUpdated Called');
     notifyListeners();
   }
 
