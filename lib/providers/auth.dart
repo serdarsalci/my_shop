@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:async';
+
 import '../models/http_exception.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:flutter/widgets.dart';
 
@@ -10,6 +12,7 @@ class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
   String _userId;
+  Timer _authTimer;
 
   String _apiKey = dotenv.env['API_KEY'];
 
@@ -59,6 +62,7 @@ class Auth with ChangeNotifier {
         Duration(seconds: int.tryParse(responseData['expiresIn'])),
       );
       print(_expiryDate.toString());
+      _autoLogout();
       notifyListeners();
     } catch (error) {
       throw error;
@@ -79,6 +83,19 @@ class Auth with ChangeNotifier {
     _token = null;
     _userId = null;
     _expiryDate = null;
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
     notifyListeners();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
+    final timeToExpriy = _expiryDate.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExpriy), () {
+      logout();
+    });
   }
 }
