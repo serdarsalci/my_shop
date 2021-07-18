@@ -158,7 +158,7 @@ class _AuthCardState extends State<AuthCard>
       child: AnimatedContainer(
         // AnimatedContainer automatically animates when some properties change
         // animation controllor and height animator are not needed
-        height: _authMode == AuthMode.Signup ? 320 : 320,
+        height: _authMode == AuthMode.Signup ? 340 : 320,
         duration: Duration(milliseconds: 300),
         curve: Curves.linear,
 
