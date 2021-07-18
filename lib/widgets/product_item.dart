@@ -28,10 +28,14 @@ class ProductItem extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: FadeInImage(
-              placeholder: AssetImage('assets/images/product-placeholder.png'),
-              image: NetworkImage(product.imageUrl),
-              fit: BoxFit.cover),
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+                placeholder:
+                    AssetImage('assets/images/product-placeholder.png'),
+                image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover),
+          ),
           // Image.network(
           //   product.imageUrl,
           //   fit: BoxFit.cover,
