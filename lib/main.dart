@@ -17,6 +17,8 @@ import './providers/orders.dart';
 import './screens/auth_screen.dart';
 import './providers/auth.dart';
 
+import './helpers/custom_route.dart';
+
 void main() async {
   await dotenv.load(fileName: ".env");
   // await dotenv().load();
@@ -62,13 +64,16 @@ class MyApp extends StatelessWidget {
           builder: (ctx, auth, child) => MaterialApp(
             title: 'Flutter Demo',
             theme: ThemeData(
-              primarySwatch: Colors.purple,
-              accentColor: Colors.deepOrange[50],
-              fontFamily: 'Lato',
-              // textButtonTheme: TextButtonThemeData(
-              //   style: TextButton.styleFrom(),
-              // ),
-            ),
+                primarySwatch: Colors.purple,
+                accentColor: Colors.deepOrange[50],
+                fontFamily: 'Lato',
+                // textButtonTheme: TextButtonThemeData(
+                //   style: TextButton.styleFrom(),
+                // ),
+                pageTransitionsTheme: PageTransitionsTheme(builders: {
+                  TargetPlatform.android: CustomPageTransitionBuilder(),
+                  TargetPlatform.iOS: CustomPageTransitionBuilder()
+                })),
             // home: ProductOverviewScreen(),
             home: auth.isAuth
                 ? ProductOverviewScreen()
